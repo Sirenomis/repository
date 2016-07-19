@@ -9,10 +9,14 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 
-public class CheckingMails {
+import it.xeno.util.PropertyManager;
 
-	public static void check(String host, String storeType, String user,
-			String password) {
+public class CheckingMails {
+	
+	private PropertyManager props = PropertyManager.getInstance();
+	
+
+	public void check() {
 		try {
 
 			// create properties field
@@ -26,7 +30,7 @@ public class CheckingMails {
 
 			// create the POP3 store object and connect with the pop server
 			Store store = emailSession.getStore("imaps");
-			store.connect(host, user, password);
+			store.connect(host, username, password);
 			
 			Folder folder = store.getFolder("INBOX");
 			folder.open(Folder.READ_ONLY);
@@ -58,14 +62,27 @@ public class CheckingMails {
 	}
 
 	public static void main(String[] args) {
+		CheckingMails cm = new CheckingMails();
+		cm.check();
 
-		String host = "pop.gmail.com";// change accordingly
-		String mailStoreType = "pop3";
-		String username = "test@gmail.com";// change accordingly
-		String password = "xxx";// change accordingly
-
-		check(host, mailStoreType, username, password);
-
+	}
+	
+	private String host;
+	private String mailStoreType;
+	private String username;
+	private String password;
+	
+	public CheckingMails(){
+		host = props.getConfig("mail.host");
+		mailStoreType = props.getConfig("mail.mailstoreType");
+		username = props.getConfig("mail.username");
+		password = props.getConfig("mail.password");
+		
+		System.out.println(mailStoreType);
+		System.out.println(host);
+		System.out.println(username);
+		System.out.println(password);
+		
 	}
 
 }
