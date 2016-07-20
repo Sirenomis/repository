@@ -1,7 +1,6 @@
 package it.xeno.core;
 
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -10,12 +9,16 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 
+import org.apache.log4j.Logger;
+
+import com.sun.mail.util.MailSSLSocketFactory;
+
 import it.xeno.bean.MailConnectorBean;
 import it.xeno.util.PropertyManager;
 
 public class MailConnector {
 	
-	private Logger logger = Logger.getLogger(MailConnector.class.getName());
+	private Logger logger = Logger.getLogger(MailConnector.class);
 	private PropertyManager props = PropertyManager.getInstance();
 	
 
@@ -28,6 +31,16 @@ public class MailConnector {
 			properties.put("mail.pop3.host", host);
 			properties.put("mail.pop3.port", port);
 			properties.put("mail.pop3.starttls.enable", "true");
+			
+//			properties.put("mail.imaps.ssl.trust", "*");
+//			properties.put("mail.imaps.ssl.checkserveridentity", "false");
+//			properties.put("mail.pop3s.ssl.trust", "*");
+//			properties.put("mail.pop3s.ssl.checkserveridentity", "false");
+			
+			MailSSLSocketFactory socketFactory= new MailSSLSocketFactory();
+			socketFactory.setTrustAllHosts(true);
+			properties.put("mail.imaps.ssl.socketFactory", socketFactory);
+			
 			Session emailSession = Session.getDefaultInstance(properties);
 
 
@@ -83,12 +96,11 @@ public class MailConnector {
 		password = props.getConfig("mail.password");
 		port = props.getConfig("mail.port");
 		
-		
-		System.out.println(mailStoreType);
-		System.out.println(host);
-		System.out.println(username);
-		System.out.println(password);
-		System.out.println(port);
+		logger.debug(mailStoreType);
+		logger.debug(host);
+		logger.debug(username);
+		logger.debug(password);
+		logger.debug(port);
 		
 	}
 	
