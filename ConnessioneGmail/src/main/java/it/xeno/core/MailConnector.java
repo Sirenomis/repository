@@ -32,11 +32,6 @@ public class MailConnector {
 			properties.put("mail.pop3.port", port);
 			properties.put("mail.pop3.starttls.enable", "true");
 			
-//			properties.put("mail.imaps.ssl.trust", "*");
-//			properties.put("mail.imaps.ssl.checkserveridentity", "false");
-//			properties.put("mail.pop3s.ssl.trust", "*");
-//			properties.put("mail.pop3s.ssl.checkserveridentity", "false");
-			
 			MailSSLSocketFactory socketFactory= new MailSSLSocketFactory();
 			socketFactory.setTrustAllHosts(true);
 			properties.put("mail.imaps.ssl.socketFactory", socketFactory);
